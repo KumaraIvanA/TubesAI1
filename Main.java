@@ -53,11 +53,12 @@ public class Main {
             Random rnd = new Random(seed[j]);
             //jalankan algoritma dengan rnd sbg Random Number Generator
             //gen (random generator) dikirim ke algogen, jadi hanya menggunakan satu generator untuk keseluruhan algo
-            GenerativeAlgorithm ga = new GenerativeAlgorithm(rnd, map, fStation, j, fStation, fStation); 
-            Individual res = ga.run();	//ambil yg terbaik
-            double fit ; //fungsi fitness untuk cari tahu seberapa bagus fitnesnya
-            total = total + fit; //hitung total fitness seluruhnya 
+            int elitism = 0,maxPopulation = 0,crossoverRate =0,mutationRate=0,totalGen=0;
 
+            GenerativeAlgorithm ga = new GenerativeAlgorithm(rnd, map, elitism,maxPopulation, crossoverRate, mutationRate, totalGen); 
+            Individual res = ga.run();	//ambil yg terbaik
+            double fit = 1.0; //benerin ini fungisnya. fungsi fitness untuk cari tahu seberapa bagus fitnesnya
+            total = total + fit; //hitung total fitness seluruhnya 
         }
     }    
 }
