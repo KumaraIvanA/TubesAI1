@@ -3,11 +3,37 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class BitStringChromosome {
-	private boolean[] bitString;
+public class BitStringChromosome extends Chromosome<BitStringChromosome> {
+	private Boolean[] bitString;
+	private int toggles;
 
-	public BitStringChromosome(boolean[] bitString) {
+	public BitStringChromosome(int toggles, Boolean[] bitString) {
 		this.bitString = bitString;
+		this.toggles = toggles;
+	}
+
+	public BitStringChromosome crossover(BitStringChromosome other) {
+		// ...
+		return new BitStringChromosome(toggles, bitString);
+	}
+
+	public BitStringChromosome mutate() {
+		// ...
+		return new BitStringChromosome(toggles, bitString);
+	}
+
+	public int[] decode() {
+		int[] result = new int[toggles];
+
+		int resultCounter = 0;
+		for (int i = 0; i < bitString.length; i++) {
+			if (bitString[i]) {
+				result[resultCounter] = i;
+				resultCounter++;
+			}
+		}
+
+		return result;
 	}
 
 	public boolean[] getBitString() {
@@ -24,11 +50,12 @@ public class BitStringChromosome {
 		Random r = new Random(seed);
 		Collections.shuffle(indexes, r);
 
-		boolean[] bitString = new boolean[length];
+		Boolean[] bitString = new Boolean[length];
 		for (int i = 0; i < toggles; i++) {
-			bitString[i] = true;
+			bitString[indexes.get(i)] = true;
 		}
 
-		return new BitStringChromosome(bitString);
+		return new BitStringChromosome(toggles, bitString);
 	}
+
 }
