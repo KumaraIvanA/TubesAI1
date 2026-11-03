@@ -9,8 +9,7 @@ public class GenerativeAlgorithm {
     public double elitismPct;
     public int totalGeneration;
 
-    public GenerativeAlgorithm(Random random, Map isiMap, int maxPopulationSize, double crossoverRate, double mutationRate,
-            int totalGeneration) {
+    public GenerativeAlgorithm(Random random, Map isiMap,int elitismPct,int maxPopulationSize, double crossoverRate, double mutationRate, int totalGeneration) {
         this.random = random;
         this.isiMap = isiMap;
         this.maxPopulationSize = maxPopulationSize;
@@ -57,8 +56,13 @@ public class GenerativeAlgorithm {
 
     //untuk cek apakah generasi saat ini sudah melewati batas
     public boolean terminate(int generation) {
-        if (generation>=this.totalGeneration) return true;
-        else return false;
+        if (generation>=this.totalGeneration) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
     }
     
 }
