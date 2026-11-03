@@ -16,7 +16,6 @@ public class Main {
         }
         double total = 0;
 
-        
         //READ INPUT
         String path = "Test Cases/n20_acak_01.txt"; //path untuk test case input
         int baris = 0,kolom = 0,fStation = 0; //inisialisasi variabel baris,kolom,dan fStation 
@@ -57,7 +56,7 @@ public class Main {
 
             GenerativeAlgorithm ga = new GenerativeAlgorithm(rnd, map, elitism,maxPopulation, crossoverRate, mutationRate, totalGen); 
             Individual res = ga.run();	//ambil yg terbaik
-            double fit = 1.0; //benerin ini fungisnya. fungsi fitness untuk cari tahu seberapa bagus fitnesnya
+            double fit = res.getFitness(); //fungsi fitness untuk cari tahu seberapa bagus fitnesnya
             total = total + fit; //hitung total fitness seluruhnya 
         }
     }    
