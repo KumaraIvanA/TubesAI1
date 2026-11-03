@@ -53,6 +53,10 @@ public class Individual implements Comparable<Individual> {
         return this.fitness;
     }
 
+    public double getFitness() {
+        return this.fitness;
+    }
+    
     // Tepat satu FS berpindah, bit di kromosom ini diubah langsung
     public void doMutation(int type, int[][] neighbors) {
         if (type == MUTATION_RANDOM) {
