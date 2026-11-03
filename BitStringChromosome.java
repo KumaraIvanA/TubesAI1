@@ -10,6 +10,11 @@ public class BitStringChromosome {
 		this.bitString = bitString;
 	}
 
+	public boolean[] getBitString() {
+		return bitString;
+	}
+
+	// ini ga random (?)
 	public static BitStringChromosome generateRandom(int length, int toggles, int seed) {
 		List<Integer> indexes = new ArrayList<Integer>();
 		for (int i = 0; i < length; i++) {
