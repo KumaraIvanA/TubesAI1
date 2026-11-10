@@ -20,39 +20,52 @@ public class BitStringChromosome extends Chromosome<BitStringChromosome> {
 		this.toggles = toggles;
 	}
 
-	public BitStringChromosome crossoverSingle(BitStringChromosome other) {
+	public BitStringChromosome[] crossoverSingle(BitStringChromosome other) {
 		int cutoff = rand.nextInt();
 
 		boolean[] childBits1 = new boolean[bitString.length];
-		boolean[] child2 = new boolean[bitString.length];
+		boolean[] childBits2 = new boolean[bitString.length];
 		for (int i = 0; i < cutoff; i++) {
 			childBits1[i] = bitString[i];
-			child2[i] = other.getBitString()[i];
+			childBits2[i] = other.getBitString()[i];
 		}
 
 		for (int i = cutoff; i < bitString.length; i++) {
 			childBits1[i] = other.getBitString()[i];
-			child2[i] = bitString[i];
+			childBits2[i] = bitString[i];
 		} 
 
 		repair(childBits1);
+		repair(childBits2);
 
-		return new BitStringChromosome(toggles, childBits1);
+		BitStringChromosome[] childrens = new BitStringChromosome[2];
+		childrens[0] = new BitStringChromosome(toggles, childBits1);
+		childrens[1] = new BitStringChromosome(toggles, childBits1);
+		return childrens;
 	}
 
-	public BitStringChromosome crossoverUniform(BitStringChromosome other) {
-		boolean[] childBits = new boolean[bitString.length];
+	public BitStringChromosome[] crossoverUniform(BitStringChromosome other) {
+		boolean[] childBits1 = new boolean[bitString.length];
+		boolean[] childBits2 = new boolean[bitString.length];
+
 		for (int i = 0; i < bitString.length; i++) {
-			if (bitString[i] == other.getBitString()[i]) {
-				childBits[i] = bitString[i];
+			boolean toggle = rand.nextBoolean();
+			if (toggle) {
+				childBits1[i] = bitString[i];
+				childBits2[i] = other.getBitString()[i];
 			} else {
-				childBits[i] = rand.nextBoolean();
+				childBits1[i] = other.getBitString()[i];
+				childBits2[i] = bitString[i];
 			}
 		}
 		
-		repair(childBits);
+		repair(childBits1);
+		repair(childBits2);
 
-		return new BitStringChromosome(toggles, childBits);
+		BitStringChromosome[] childrens = new BitStringChromosome[2];
+		childrens[0] = new BitStringChromosome(toggles, childBits1);
+		childrens[1] = new BitStringChromosome(toggles, childBits2);
+		return childrens;
 	}
 
 	public BitStringChromosome mutateRandom() {
