@@ -26,9 +26,8 @@ public class Individual implements Comparable<Individual> {
     }
 
     // menghitung cost dan fitness
-    public double setFitness(int[][] distMatrix, int numHouses) {
+    public double setFitness(char[][] distMatrix, int numHouses) {
 		int[] cells = chromosome.decode();
-		this.cost = DistanceMatrix.calculateCost(cells, distMatrix, numHouses);
         this.fitness = 1.0 / (1.0 + this.cost); // cost kecil -> fitness besar
         return this.fitness;
     }

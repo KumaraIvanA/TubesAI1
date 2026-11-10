@@ -1,10 +1,11 @@
+
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.Scanner;
-import java.io.FileNotFoundException;
-
 
 public class Main {
+
     public static void main(String[] args) {
 
         int npm_ketua = 24045;
@@ -18,9 +19,9 @@ public class Main {
 
         //READ INPUT
         String path = "Test Cases/n20_acak_01.txt"; //path untuk test case input
-        int baris = 0,kolom = 0,fStation = 0; //inisialisasi variabel baris,kolom,dan fStation 
-        char [][] peta = new char[baris][kolom]; //inisialisasi array peta
-        char character; 
+        int baris = 0, kolom = 0, fStation = 0; //inisialisasi variabel baris,kolom,dan fStation 
+        char[][] peta = new char[baris][kolom]; //inisialisasi array peta
+        char character;
         String barisKarakter;
 
         try (Scanner sc = new Scanner(new File(path))) { //membaca file
@@ -28,8 +29,7 @@ public class Main {
             kolom = sc.nextInt(); //membaca banyaknya kolom
             fStation = sc.nextInt(); //membaca banyaknya fStation yang dibutuhkan
 
-            peta  = new char[baris][kolom]; //peta sebesar baris x kolom
-
+            peta = new char[baris][kolom]; //peta sebesar baris x kolom
 
             for (int i = 0; i < peta[0].length; i++) {
                 barisKarakter = sc.next(); //membaca karakter tiap baris
@@ -42,8 +42,8 @@ public class Main {
             //exception saat file tidak ditemukan
             System.out.println("File tidak ditemukan");
             e.printStackTrace();
-        }        
-    
+        }
+
         //Panggil Map untuk mendapatkan isi map 
         Map map = new Map(baris, kolom, fStation, peta);
 
@@ -52,12 +52,12 @@ public class Main {
             Random rnd = new Random(seed[j]);
             //jalankan algoritma dengan rnd sbg Random Number Generator
             //gen (random generator) dikirim ke algogen, jadi hanya menggunakan satu generator untuk keseluruhan algo
-            int elitism = 0,maxPopulation = 0,crossoverRate =0,mutationRate=0,totalGen=0;
+            int elitism = 0, maxPopulation = 0, crossoverRate = 0, mutationRate = 0, totalGen = 0;
 
-            GenerativeAlgorithm ga = new GenerativeAlgorithm(rnd, map, elitism,maxPopulation, crossoverRate, mutationRate, totalGen); 
+            GenerativeAlgorithm ga = new GenerativeAlgorithm(rnd, map, elitism, maxPopulation, crossoverRate, mutationRate, totalGen);
             Individual res = ga.run();	//ambil yg terbaik
             double fit = res.getFitness(); //fungsi fitness untuk cari tahu seberapa bagus fitnesnya
             total = total + fit; //hitung total fitness seluruhnya 
         }
-    }    
+    }
 }
