@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Individual implements Comparable<Individual> {
+public class Individual<C extends Chromosome<C>> implements Comparable<Individual<C>> {
     public static final int CROSSOVER_ONE_POINT = 0;
     public static final int CROSSOVER_UNIFORM = 1;
     public static final int MUTATION_RANDOM = 0;
@@ -47,7 +47,7 @@ public class Individual implements Comparable<Individual> {
         }
     }
 
-    public Individual[] doCrossover(Individual other, int type) {
+    public Individual<C>[] doCrossover(Individual<C> other, int type) {
 		BitStringChromosome[] childrens;
 		if (type == CROSSOVER_ONE_POINT) {
 			childrens = chromosome.crossoverSingle(other.chromosome);
@@ -57,14 +57,14 @@ public class Individual implements Comparable<Individual> {
             throw new IllegalArgumentException("jenis crossover tidak dikenal");
 		}
 
-		Individual[] newIndividuals = new Individual[2];
-		newIndividuals[0] = new Individual(this.MyRand, childrens[0], p);
-		newIndividuals[1] = new Individual(this.MyRand, childrens[1], p);
+		Individual<C>[] newIndividuals = new Individual[2];
+		newIndividuals[0] = new Individual<C>(this.MyRand, childrens[0], p);
+		newIndividuals[1] = new Individual<C>(this.MyRand, childrens[1], p);
 		return newIndividuals;
     }
 
     @Override
-    public int compareTo(Individual other) { // fitness terbesar di depan
+    public int compareTo(Individual<C> other) { // fitness terbesar di depan
         if (this.fitness > other.fitness) {
             return -1;
         } else if (this.fitness < other.fitness) {
