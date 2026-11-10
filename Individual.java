@@ -5,6 +5,8 @@ public class Individual<C extends Chromosome<C>> implements Comparable<Individua
     public static final int CROSSOVER_UNIFORM = 1;
     public static final int MUTATION_RANDOM = 0;
     public static final int MUTATION_LOCAL = 1; // geser satu FS ke sel kosong yang bertetangga
+    public static final int CHROMOSOME_BITSTRING = 0;
+    public static final int CHROMOSOME_B = 1;
 
     public BitStringChromosome chromosome; // kromosom: objek BitStringChromosome (true = sel kosong nomor k berisi FS)
     public double cost; // rata-rata jarak rumah ke FS terdekat (makin kecil makin baik)

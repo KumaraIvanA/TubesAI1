@@ -16,6 +16,32 @@ public class Main {
             seed[i] = rand.nextInt(batas + 1); //simpan agar bisa diulang
         }
         double total = 0;
+        
+        int chromosomeType = Individual.CHROMOSOME_BITSTRING; //nilai default
+        int crossoverType = Individual.CROSSOVER_ONE_POINT; // nilai default
+        int mutationType = Individual.MUTATION_LOCAL; // nilai default
+
+        try {
+            if (args.length > 0) crossoverType  = Integer.parseInt(args[0]);
+            if (args.length > 1) mutationType   = Integer.parseInt(args[1]);
+            if (args.length > 2) chromosomeType = Integer.parseInt(args[2]);
+        } catch (NumberFormatException e) {
+            System.out.println("Argumen harus berupa angka. Contoh: java Main 1 0 0");
+            return;
+        }
+
+        if (chromosomeType < 0 || chromosomeType > 1) {
+            System.out.println("Kromosom tidak valid (0 = tipe A, 1 = tipe B)");
+            return;
+        }
+        if (crossoverType < 0 || crossoverType > 1) {
+            System.out.println("Crossover tidak valid (0 = one point, 1 = uniform)");
+            return;
+        }
+        if (mutationType < 0 || mutationType > 1) {
+            System.out.println("Mutation tidak valid (0 = random, 1 = local)");
+            return;
+        }
 
         //READ INPUT
         String path = "Test Cases/n20_acak_01.txt"; //path untuk test case input
