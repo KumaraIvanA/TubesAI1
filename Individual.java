@@ -16,18 +16,7 @@ public class Individual implements Comparable<Individual> {
 
     // membuat individu acak: tepat p bit bernilai true
     public Individual(Random MyRand, int numCells, int p) {
-        this.MyRand = MyRand;
-        this.p = p;
-        boolean[] bits = new boolean[numCells]; // semua false
-        int placed = 0; // jumlah FS yang sudah ditaruh
-        while (placed < p) { // ulangi sampai p FS
-            int k = MyRand.nextInt(numCells); // sel kosong acak
-            if (!bits[k]) { // hanya jika sel itu belum berisi FS
-                bits[k] = true; // taruh FS
-                placed++; // hitung
-            }
-        }
-        this.chromosome = new BitStringChromosome(bits); // bungkus bit menjadi kromosom
+        this.chromosome = BitStringChromosome.generateRandom(numCells, p, MyRand); // bungkus bit menjadi kromosom
     }
 
     // membuat individu baru berdasarkan kromosom dari luar
@@ -39,16 +28,8 @@ public class Individual implements Comparable<Individual> {
 
     // menghitung cost dan fitness
     public double setFitness(int[][] distMatrix, int numHouses) {
-        boolean[] bits = chromosome.getBitString(); // ambil bit dari kromosom
-        int[] cells = new int[p]; // daftar sel yang berisi FS
-        int k = 0; // posisi ngisi
-        for (int i = 0; i < bits.length; i++) { // baca setiap bit
-            if (bits[i]) { // bit true berarti ada FS
-                cells[k] = i; // catat nomor selnya
-                k++; // geser posisi
-            }
-        }
-        this.cost = DistanceMatrix.calculateCost(cells, distMatrix, numHouses);
+		int[] cells = chromosome.decode();
+		this.cost = DistanceMatrix.calculateCost(cells, distMatrix, numHouses);
         this.fitness = 1.0 / (1.0 + this.cost); // cost kecil -> fitness besar
         return this.fitness;
     }
