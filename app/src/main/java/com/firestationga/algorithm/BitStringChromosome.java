@@ -1,27 +1,47 @@
-import java.util.Random;
+package com.firestationga.algorithm;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Kelas chromosome yang menggunakan konsep bitstring.
+ * 
+ * @author Kumara Ivan Anuraga
+ */
 public class BitStringChromosome extends Chromosome<BitStringChromosome> {
 	private boolean[] bitString;
-	private int toggles;
-	private Random rand;
+	private Environment env;
 
 	public void print() {
-		for (boolean b: bitString) {
+		for (boolean b : bitString) {
 			System.out.print(b ? 1 : 0);
 		}
 		System.out.println();
 	}
 
-	public BitStringChromosome(int toggles, boolean[] bitString) {
+	public BitStringChromosome(boolean[] bitString, Environment env) {
 		this.bitString = bitString;
-		this.toggles = toggles;
+		this.env = env;
+	}
+
+	public BitStringChromosome(Environment env) {
+		List<Integer> indexes = new ArrayList<Integer>();
+		for (int i = 0; i < env.map().getNEmptyCells(); i++) {
+			indexes.add(i);
+		}
+
+		Collections.shuffle(indexes, env.random());
+
+		this.bitString = new boolean[env.map().getNEmptyCells()];
+		this.env = env;
+		for (int i = 0; i < env.nFireStations(); i++) {
+			bitString[indexes.get(i)] = true;
+		}
 	}
 
 	public BitStringChromosome[] crossoverSingle(BitStringChromosome other) {
-		int cutoff = rand.nextInt();
+		int cutoff = env.random().nextInt(bitString.length);
 
 		boolean[] childBits1 = new boolean[bitString.length];
 		boolean[] childBits2 = new boolean[bitString.length];
@@ -33,14 +53,14 @@ public class BitStringChromosome extends Chromosome<BitStringChromosome> {
 		for (int i = cutoff; i < bitString.length; i++) {
 			childBits1[i] = other.getBitString()[i];
 			childBits2[i] = bitString[i];
-		} 
+		}
 
 		repair(childBits1);
 		repair(childBits2);
 
 		BitStringChromosome[] childrens = new BitStringChromosome[2];
-		childrens[0] = new BitStringChromosome(toggles, childBits1);
-		childrens[1] = new BitStringChromosome(toggles, childBits1);
+		childrens[0] = new BitStringChromosome(childBits1, env);
+		childrens[1] = new BitStringChromosome(childBits2, env);
 		return childrens;
 	}
 
@@ -49,29 +69,28 @@ public class BitStringChromosome extends Chromosome<BitStringChromosome> {
 		boolean[] childBits2 = new boolean[bitString.length];
 
 		for (int i = 0; i < bitString.length; i++) {
-			boolean toggle = rand.nextBoolean();
-			if (toggle) {
+			if (env.random().nextBoolean()) {
 				childBits1[i] = bitString[i];
-				childBits2[i] = other.getBitString()[i];
+				childBits2[i] = other.bitString[i];
 			} else {
-				childBits1[i] = other.getBitString()[i];
+				childBits1[i] = other.bitString[i];
 				childBits2[i] = bitString[i];
 			}
 		}
-		
+
 		repair(childBits1);
 		repair(childBits2);
 
 		BitStringChromosome[] childrens = new BitStringChromosome[2];
-		childrens[0] = new BitStringChromosome(toggles, childBits1);
-		childrens[1] = new BitStringChromosome(toggles, childBits2);
+		childrens[0] = new BitStringChromosome(childBits1, env);
+		childrens[1] = new BitStringChromosome(childBits2, env);
 		return childrens;
 	}
 
 	public BitStringChromosome mutateRandom() {
 		// Return awal jika semua petak berisi FS.
-		if (bitString.length == toggles) {
-			return new BitStringChromosome(toggles, bitString);
+		if (bitString.length == env.nFireStations()) {
+			return new BitStringChromosome(bitString, env);
 		}
 
 		List<Integer> chosenIndexes = new ArrayList<Integer>();
@@ -85,11 +104,11 @@ public class BitStringChromosome extends Chromosome<BitStringChromosome> {
 		}
 
 		// Pilih petak yang berisi FS
-		int chosenIndex = rand.nextInt(chosenIndexes.size());
+		int chosenIndex = env.random().nextInt(chosenIndexes.size());
 		int from = chosenIndexes.get(chosenIndex);
 
 		// Pilih petak yang tidak berisi FS
-		int emptyIndex = rand.nextInt(emptyIndexes.size());
+		int emptyIndex = env.random().nextInt(emptyIndexes.size());
 		int to = emptyIndexes.get(emptyIndex);
 
 		// Buat array duplikat dan tukar FS
@@ -97,59 +116,46 @@ public class BitStringChromosome extends Chromosome<BitStringChromosome> {
 		newBitString[from] = false;
 		newBitString[to] = true;
 
-		return new BitStringChromosome(toggles, newBitString);
+		return new BitStringChromosome(newBitString, env);
 	}
 
-	public BitStringChromosome mutateLocal(Map map) {
+	public BitStringChromosome mutateLocal() {
 		// Return awal jika semua petak berisi FS.
-		if (bitString.length == toggles) {
-			return new BitStringChromosome(toggles, bitString);
+		if (bitString.length == env.nFireStations()) {
+			return new BitStringChromosome(bitString, env);
 		}
 
-		int rows = map.baris;
-		int cols = map.kolom;
-
-		int from = rand.nextInt(bitString.length);
-		while (!bitString[from]) {
-			from = rand.nextInt(bitString.length);
+		List<Integer> froms = new ArrayList<Integer>();
+		for (int i = 0; i < bitString.length; i++) {
+			if (bitString[i]) {
+				froms.add(i);
+			}
 		}
 
-		int row = from / rows;
-		int col = from % rows;
+		Collections.shuffle(froms, env.random());
 
-		List<Integer> choices = new ArrayList<Integer>();
-		int candidate = from - rows;
-		if (row > 0 && map.get(candidate) == '.') {
-			choices.add(candidate);
+		for (int from : froms) {
+			int direction = env.random().nextBoolean() ? 1 : -1;
+			int[] tos = { from + direction, from - direction };
+
+			for (int to : tos) {
+				if (bitString[to]) {
+					continue;
+				}
+
+				boolean[] newBitString = bitString.clone();
+				newBitString[from] = false;
+				newBitString[to] = true;
+
+				return new BitStringChromosome(newBitString, env);
+			}
 		}
 
-		candidate = from - 1;
-		if (col > 0 && map.get(candidate) == '.') {
-			choices.add(candidate);
-		}
-
-		candidate = from + 1;
-		if (row < rows - 1 && map.get(candidate) == '.') {
-			choices.add(candidate);
-		}
-
-		candidate = from + rows;
-		if (col < cols - 1 && map.get(candidate) == '.') {
-			choices.add(from + rows);
-		}
-
-		int to = choices.get(rand.nextInt(choices.size()));
-
-		// Buat array duplikat dan tukar FS
-		boolean[] newBitString = bitString.clone();
-		newBitString[from] = false;
-		newBitString[to] = true;
-
-		return new BitStringChromosome(toggles, newBitString);
+		return new BitStringChromosome(bitString, env);
 	}
 
 	public int[] decode() {
-		int[] result = new int[toggles];
+		int[] result = new int[env.nFireStations()];
 
 		int resultCounter = 0;
 		for (int i = 0; i < bitString.length; i++) {
@@ -170,16 +176,16 @@ public class BitStringChromosome extends Chromosome<BitStringChromosome> {
 			}
 		}
 
-		while (ones > toggles) {
-			int i = rand.nextInt(bits.length);
+		while (ones > env.nFireStations()) {
+			int i = env.random().nextInt(bits.length);
 			if (bits[i]) {
 				bits[i] = false;
 				ones--;
 			}
 		}
 
-		while (ones < toggles) {
-			int i = rand.nextInt(bits.length);
+		while (ones < env.nFireStations()) {
+			int i = env.random().nextInt(bits.length);
 			if (!bits[i]) {
 				bits[i] = true;
 				ones++;
@@ -191,19 +197,4 @@ public class BitStringChromosome extends Chromosome<BitStringChromosome> {
 		return bitString;
 	}
 
-	public static BitStringChromosome generateRandom(int length, int toggles, Random r) {
-		List<Integer> indexes = new ArrayList<Integer>();
-		for (int i = 0; i < length; i++) {
-			indexes.add(i);
-		}
-
-		Collections.shuffle(indexes, r);
-
-		boolean[] bitString = new boolean[length];
-		for (int i = 0; i < toggles; i++) {
-			bitString[indexes.get(i)] = true;
-		}
-
-		return new BitStringChromosome(toggles, bitString);
-	}
 }
