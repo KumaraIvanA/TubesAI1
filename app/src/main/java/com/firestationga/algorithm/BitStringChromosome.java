@@ -139,6 +139,10 @@ public class BitStringChromosome extends Chromosome<BitStringChromosome> {
 			int[] tos = { from + direction, from - direction };
 
 			for (int to : tos) {
+				if (to < 0 || to >= bitString.length) {
+					continue;
+				}
+
 				if (bitString[to]) {
 					continue;
 				}
