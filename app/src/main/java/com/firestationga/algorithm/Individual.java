@@ -29,7 +29,7 @@ public class Individual<C extends Chromosome<C>> implements Comparable<Individua
 			case BITSTRING:
 				return (Individual<C>) new Individual<BitStringChromosome>(new BitStringChromosome(env), env);
 			case INTEGER:
-				return (Individual<C>) new Individual<BitStringChromosome>(new BitStringChromosome(env), env);
+				return (Individual<C>) new Individual<IntegerChromosome>(new IntegerChromosome(env), env);
 			default:
 				return null;
 		}
