@@ -92,7 +92,7 @@ public class Main {
 			System.out.printf("Average cost out of %d runs: %.5f\n", runs, costSum / runs);
 			System.out.println("Costs recap:");
 			for (double cost : costList) {
-				System.out.println(cost);
+				System.out.printf("%.5f\n", cost);
 			}
 		}
 	}
