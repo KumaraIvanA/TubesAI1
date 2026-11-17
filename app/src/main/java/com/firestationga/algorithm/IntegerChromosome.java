@@ -24,7 +24,10 @@ public class IntegerChromosome extends Chromosome<IntegerChromosome> {
 	}
 
 	public IntegerChromosome(Environment env) {
-		List<Integer> emptyCells = new ArrayList<Integer>(env.map().getEmptyCells());
+		List<Integer> emptyCells = new ArrayList<Integer>();
+		for (int i = 0; i < env.map().getNEmptyCells(); i++) {
+			emptyCells.add(i);
+		}
 		Collections.shuffle(emptyCells, env.random());
 
 		this.genes = new int[env.nFireStations()];
@@ -80,7 +83,7 @@ public class IntegerChromosome extends Chromosome<IntegerChromosome> {
 	}
 
 	public IntegerChromosome mutateRandom() {
-		if (genes.length == env.map().getEmptyCells().size()) {
+		if (genes.length == env.map().getNEmptyCells()) {
 			return new IntegerChromosome(genes, env);
 		}
 
@@ -88,7 +91,10 @@ public class IntegerChromosome extends Chromosome<IntegerChromosome> {
 				.boxed()
 				.collect(Collectors.toCollection(ArrayList::new));
 
-		Set<Integer> optionsSet = new HashSet<Integer>(env.map().getEmptyCells());
+		Set<Integer> optionsSet = new HashSet<Integer>();
+		for (int i = 0; i < env.map().getNEmptyCells(); i++) {
+			optionsSet.add(i);
+		}
 		optionsSet.removeAll(usedValues);
 
 		List<Integer> options = new ArrayList<Integer>(optionsSet);
@@ -102,7 +108,10 @@ public class IntegerChromosome extends Chromosome<IntegerChromosome> {
 	}
 
 	public IntegerChromosome mutateLocal() {
-		List<Integer> values = env.map().getEmptyCells();
+		List<Integer> values = new ArrayList<Integer>();
+		for (int i = 0; i < env.map().getNEmptyCells(); i++) {
+			values.add(i);
+		}
 
 		if (genes.length == values.size()) {
 			return new IntegerChromosome(genes, env);
@@ -154,7 +163,11 @@ public class IntegerChromosome extends Chromosome<IntegerChromosome> {
 				.collect(Collectors.toCollection(HashSet::new));
 
 		if (set.size() < genes.length) {
-			Set<Integer> optionsSet = new HashSet<Integer>(env.map().getEmptyCells());
+			Set<Integer> optionsSet = new HashSet<Integer>();
+			for (int i = 0; i < env.map().getNEmptyCells(); i++) {
+				optionsSet.add(i);
+			}
+
 			optionsSet.removeAll(set);
 
 			List<Integer> options = new ArrayList<Integer>(optionsSet);
