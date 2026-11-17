@@ -58,7 +58,9 @@ public class Main {
 
 		int runs = options.runs();
 
+		System.out.println("Test");
 		double costSum = 0;
+		double[] costList = new double[runs];
 		for (int i = 0; i < runs; i++) {
 			Environment env = new Environment(
 					options.chromosomeType(),
@@ -78,7 +80,9 @@ public class Main {
 				System.out.printf("Run %d:\n", i + 1);
 			}
 
+
 			GeneticAlgorithmResult result = runGA(env);
+			costList[i] = result.getCost();
 			costSum += result.getCost();
 			System.out.println(result);
 			System.out.println();
@@ -86,6 +90,10 @@ public class Main {
 
 		if (runs > 1) {
 			System.out.printf("Average cost out of %d runs: %.5f\n", runs, costSum / runs);
+			System.out.println("Costs recap:");
+			for (double cost : costList) {
+				System.out.println(cost);
+			}
 		}
 	}
 

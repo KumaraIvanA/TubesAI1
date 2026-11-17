@@ -144,6 +144,10 @@ public class IntegerChromosome extends Chromosome<IntegerChromosome> {
 					continue;
 				}
 
+				if (newValue < 0 || newValue >= env.map().getNEmptyCells()) {
+					continue;
+				}
+
 				int[] newGenes = genes.clone();
 				newGenes[geneIndex] = newValue;
 				return new IntegerChromosome(newGenes, env);
