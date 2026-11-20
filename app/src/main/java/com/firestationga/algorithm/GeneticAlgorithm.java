@@ -11,7 +11,7 @@ import com.firestationga.utility.Point;
  * @author Natasya Keisya Hartono
  */
 public class GeneticAlgorithm<C extends Chromosome<C>> {
-	private static final double STAGNATION_THRESHOLD = 0.25;
+	private static final double STAGNATION_THRESHOLD = 0.50;
 	private static final long TIME_LIMIT_MS = 60_000;
 	private Environment env;
 	private Population<C> population;
