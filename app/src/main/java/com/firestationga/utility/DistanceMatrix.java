@@ -2,6 +2,12 @@ package com.firestationga.utility;
 
 import java.util.*;
 
+/**
+ * Kelas yang menyediakan metode untuk menghitung distance matrix dan menghitung
+ * jarak setiap rumah ke <i>fire station</i> terdekat.
+ *
+ * @author Clara Joycelyne Siauttara
+ */
 public class DistanceMatrix {
 
 	// Direction arrays untuk bergerak 4 arah: Atas, Bawah, Kiri, Kanan
@@ -10,6 +16,7 @@ public class DistanceMatrix {
 
 	/**
 	 * Menghitung matriks jarak dari setiap rumah ke semua sel kosong.
+	 * Ditulis oleh: Clara Joycelyne Siauttara
 	 * 
 	 * @param grid       Matriks char ukuran m x n (berisi '.', 'H', 'T')
 	 * @param houses     List koordinat rumah
@@ -95,23 +102,35 @@ public class DistanceMatrix {
 		return distMatrix;
 	}
 
-	// Misal S adalah array berisi indeks sel kosong yang dipasang Fire Station
-	// (ukuran p)
+	/**
+	 * Method untuk menghitung rata-rata jarak setiap rumah ke
+	 * <i>fire station</i> terdekat.
+	 * Ditulis oleh: Clara Joycelyne Siauttara
+	 *
+	 * @param S array yang berisi lokasi <i>fire station</i>
+	 * @param distMatrix array yang berupa <i>distance matrix</i> sebuah peta
+	 * @return rata-rata jarak setiap rumah ke <i>fire station</i> terdekat
+	 */
 	public static double calculateCost(int[] S, int[][] distMatrix) {
 		int totalDistance = 0;
 		int numHouses = distMatrix.length;
 
+		// Lakukan looping untuk setiap rumah
 		for (int h = 0; h < numHouses; h++) {
 			int minDist = Integer.MAX_VALUE;
+
+			// Peroleh jarak rumah ke fire station terdekat
 			for (int fsIdx : S) {
 				int d = distMatrix[h][fsIdx];
 				if (d < minDist) {
 					minDist = d;
 				}
 			}
+
 			totalDistance += minDist;
 		}
 
-		return (double) totalDistance / numHouses; // Cost rata-rata
+		// Hitung cost rata-rata
+		return (double) totalDistance / numHouses;
 	}
 }

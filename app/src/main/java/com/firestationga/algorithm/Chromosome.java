@@ -1,5 +1,10 @@
 package com.firestationga.algorithm;
 
+/**
+ * Kelas abstract yang merepresentasikan sebuah kromosom.
+ *
+ * @author Kumara Ivan Anuraga
+ */
 public abstract class Chromosome<C extends Chromosome<C>> {
 	public abstract C[] crossoverSingle(C other);
 	public abstract C[] crossoverUniform(C other);

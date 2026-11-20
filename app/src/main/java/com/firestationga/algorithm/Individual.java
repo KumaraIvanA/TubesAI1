@@ -18,12 +18,27 @@ public class Individual<C extends Chromosome<C>> implements Comparable<Individua
 	private double cost;
 	private double fitness;
 
+	/**
+	 * Konstruktor untuk membuat {@code Individual} baru dengan lingkungan
+	 * dan kromosom yang disediakan.
+	 * Ditulis oleh: Clarisa Helena
+	 * Dimodifikasi oleh: Kumara Ivan Anuraga
+	 * 
+	 * @param env lingkungan algoritma genetic
+	 */
 	public Individual(C chromosome, Environment env) {
 		this.chromosome = chromosome;
 		this.env = env;
 		setFitness();
 	}
 
+	/**
+	 * Method statis untuk membuat {@code Individual} secara acak berdasarkan
+	 * lingkungan yang disediakan.
+	 * Ditulis oleh: Kumara Ivan Anuraga
+	 * 
+	 * @return individu yang terbuat secara acak
+	 */
 	public static <C extends Chromosome<C>> Individual<C> createRandom(Environment env) {
 		switch (env.chromosomeType()) {
 			case BITSTRING:
@@ -35,6 +50,14 @@ public class Individual<C extends Chromosome<C>> implements Comparable<Individua
 		}
 	}
 
+	/**
+	 * Method untuk melakukan operasi <i>crossover</i>.
+	 * Ditulis oleh: Clarisa Helena
+	 * Dimodifikasi oleh: Kumara Ivan Anuraga
+	 * 
+	 * @param other individu yang menjadi induk kedua
+	 * @param crossoverMethod metode crossover yang akan digunakan
+	 */
 	public List<Individual<C>> crossover(Individual<C> other, CrossoverMethod crossoverMethod) {
 		C[] childrens;
 		switch (crossoverMethod) {
@@ -55,6 +78,13 @@ public class Individual<C extends Chromosome<C>> implements Comparable<Individua
 		return newIndividuals;
 	}
 
+	/**
+	 * Method untuk melakukan operasi <i>crossover</i>.
+	 * Ditulis oleh: Clarisa Helena
+	 * Dimodifikasi oleh: Kumara Ivan Anuraga
+	 * 
+	 * @param mutationMethod metode mutasi yang akan digunakan
+	 */
 	public void mutate(MutationMethod mutationMethod) {
 		switch (mutationMethod) {
 			case LOCAL:
@@ -69,12 +99,22 @@ public class Individual<C extends Chromosome<C>> implements Comparable<Individua
 		}
 	}
 
+	/**
+	 * Method untuk menghitung dan menyimpan fitness.
+	 * Ditulis oleh: Clarisa Helena
+	 * Dimodifikasi oleh: Kumara Ivan Anuraga
+	 */
 	private void setFitness() {
 		int[] fireStations = chromosome.decode();
 		this.cost = DistanceMatrix.calculateCost(fireStations, env.map().getDistanceMatrix());
 		this.fitness = 1.0 / (1.0 + cost);
 	}
 
+	/**
+	 * Method untuk membandingkan suatu individu dengan individu yang lain
+	 * berdasarkan fitnessnya.
+	 * Ditulis oleh: Clarisa Helena
+	 */
 	@Override
 	public int compareTo(Individual<C> other) {
 		if (this.fitness > other.fitness) {
@@ -86,14 +126,32 @@ public class Individual<C extends Chromosome<C>> implements Comparable<Individua
 		}
 	}
 
+	/**
+	 * Method untuk memperoleh cost individu.
+	 * Ditulis oleh: Kumara Ivan Anuraga
+	 *
+	 * @param cost individu
+	 */
 	public double getCost() {
 		return cost;
 	}
 
+	/**
+	 * Method untuk memperoleh fitness individu.
+	 * Ditulis oleh: Clarisa Helena
+	 *
+	 * @param fitness individu
+	 */
 	public double getFitness() {
 		return fitness;
 	}
 
+	/**
+	 * Method untuk memperoleh lokasi fire station
+	 * Ditulis oleh: Kumara Ivan Anuraga
+	 *
+	 * @param array lokasi fire station
+	 */
 	public int[] getFireStations() {
 		return chromosome.decode();
 	}

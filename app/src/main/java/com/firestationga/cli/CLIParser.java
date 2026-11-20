@@ -14,6 +14,7 @@ import com.firestationga.config.MutationMethod;
  * @author Kumara Ivan Anuraga
  */
 public class CLIParser {
+	// Variabel yang menyimpan pesan "help"
 	private static String helpString = "" +
 			"Usage: fsga [options...] <file>\n" +
 			"\n" +
@@ -33,7 +34,8 @@ public class CLIParser {
 			"                         (default: 1)";
 
 	/**
-	 * Menampilkan pesan <i>help</i>.
+	 * Method untuk menampilkan pesan <i>help</i>.
+	 * Ditulis oleh: Kumara Ivan Anuraga
 	 */
 	public static void printHelp() {
 		System.out.println(helpString);
@@ -41,18 +43,23 @@ public class CLIParser {
 
 	/**
 	 * Melakukan parsing terhadap argumen CLI yang diberikan.
+	 * Ditulis oleh: Kumara Ivan Anuraga
 	 * 
 	 * @param args argumen CLI
-	 * @return Options opsi untuk diberikan kepada <i>genetic algorithm</i>
+	 * @return rangkuman opsi yang dipilih pengguna untuk kemudian menjadi lingkungan <i>genetic algorithm</i>
+	 * @throws InvalidArgumentException jika terdapat argumen yang tidak valid
 	 */
 	public static Options parseArgs(String[] args) throws InvalidArgumentException {
 		for (String arg : args) {
+			// Deteksi jika di antara argumen, terdapat argumen untuk menampilkan
+			// pesan "help".
 			if (arg.equals("--help") || arg.equals("-h")) {
 				printHelp();
 				System.exit(0);
 			}
 		}
 
+		// Inisialisasi nilai konfigurasi default untuk setiap parameter.
 		Path filepath = null;
 		ChromosomeType chromosomeType = ChromosomeType.BITSTRING;
 		SelectionMethod selectionMethod = SelectionMethod.ROULETTE;
@@ -67,6 +74,8 @@ public class CLIParser {
 
 		for (int i = 0; i < args.length; i++) {
 			switch (args[i]) {
+				// Ubah nilai konfigurasi kromosom menjadi nilai yang disediakan
+				// pengguna
 				case "--chromosome":
 					try {
 						chromosomeType = ChromosomeType.valueOf(args[i + 1].toUpperCase());
@@ -75,6 +84,8 @@ public class CLIParser {
 					}
 					i++;
 					break;
+				// Ubah nilai konfigurasi metode seleksi menjadi nilai yang
+				// disediakan pengguna
 				case "--selection":
 					try {
 						selectionMethod = SelectionMethod.valueOf(args[i + 1].toUpperCase());
@@ -83,6 +94,8 @@ public class CLIParser {
 					}
 					i++;
 					break;
+				// Ubah nilai konfigurasi metode crossover menjadi nilai yang
+				// disediakan pengguna
 				case "--crossover":
 					try {
 						crossoverMethod = CrossoverMethod.valueOf(args[i + 1].toUpperCase());
@@ -91,6 +104,8 @@ public class CLIParser {
 					}
 					i++;
 					break;
+				// Ubah nilai konfigurasi metode mutasi menjadi nilai yang
+				// disediakan pengguna
 				case "--mutation":
 					try {
 						mutationMethod = MutationMethod.valueOf(args[i + 1].toUpperCase());
@@ -99,6 +114,8 @@ public class CLIParser {
 					}
 					i++;
 					break;
+				// Ubah nilai konfigurasi jumlah populasi menjadi nilai yang
+				// disediakan pengguna
 				case "--population":
 					try {
 						population = Integer.parseInt(args[i + 1]);
@@ -114,6 +131,8 @@ public class CLIParser {
 
 					i++;
 					break;
+				// Ubah nilai konfigurasi jumlah generasi yang ingin dilalui
+				// algoritma menjadi nilai yang disediakan pengguna
 				case "--generation":
 					try {
 						generations = Integer.parseInt(args[i + 1]);
@@ -129,6 +148,8 @@ public class CLIParser {
 
 					i++;
 					break;
+				// Ubah nilai konfigurasi kemungkinan terjadinya crossover
+				// menjadi nilai yang disediakan pengguna
 				case "--pcrossover":
 					try {
 						pcrossover = Double.parseDouble(args[i + 1]);
@@ -144,6 +165,8 @@ public class CLIParser {
 
 					i++;
 					break;
+				// Ubah nilai konfigurasi kemungkinan terjadinya mutasi
+				// menjadi nilai yang disediakan pengguna
 				case "--pmutation":
 					try {
 						pmutation = Double.parseDouble(args[i + 1]);
@@ -159,6 +182,8 @@ public class CLIParser {
 
 					i++;
 					break;
+				// Ubah nilai konfigurasi elitism menjadi nilai yang disediakan
+				// pengguna
 				case "--pelitism":
 					try {
 						pelitism = Double.parseDouble(args[i + 1]);
@@ -174,6 +199,8 @@ public class CLIParser {
 
 					i++;
 					break;
+				// Ubah nilai konfigurasi jumlah percobaan menjadi nilai yang
+				// disediakan pengguna
 				case "--runs":
 					try {
 						runs = Integer.parseInt(args[i + 1]);
@@ -189,21 +216,28 @@ public class CLIParser {
 
 					i++;
 					break;
+				// Simpan file path yang ditetapkan sebagai file yang berisi
+				// peta masalah
 				default:
+					// Jika sudah ada file path yang disediakan, berikan exception
 					if (filepath != null) {
 						throw new InvalidArgumentException(String.format("Invalid argument: %s", args[i]));
 					}
 
 					filepath = Path.of(args[i]);
+
+					// Jika file tidak ada, berikan exception
 					if (!Files.exists(filepath)) {
 						throw new InvalidArgumentException(
 								String.format("File doesn't exist: %s", filepath.toString()));
 					}
 
+					// Jika file bukan merupakan file biasa, berikan exception
 					if (!Files.isRegularFile(filepath)) {
 						throw new InvalidArgumentException(String.format("Path isn't a file: %s", filepath.toString()));
 					}
 
+					// Jika file tidak dapat dibaca oleh OS, berikan exception
 					if (!Files.isReadable(filepath)) {
 						throw new InvalidArgumentException(
 								String.format("Unable to read file: %s", filepath.toString()));
@@ -212,11 +246,14 @@ public class CLIParser {
 			}
 		}
 
+		// Jika sebuah file path tidak disediakan pengguna, tampilkan pesan
+		// "help" lalu keluar dari program.
 		if (filepath == null) {
 			printHelp();
 			System.exit(0);
 		}
 
+		// Kembalikan hasil parsing argumen CLI program.
 		return new Options(
 				chromosomeType,
 				selectionMethod,

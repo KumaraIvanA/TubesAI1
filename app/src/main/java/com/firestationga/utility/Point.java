@@ -3,7 +3,7 @@ package com.firestationga.utility;
 /**
  * Kelas yang menyimpan sebuah titik dengan baris dan kolom
  *
- * @author 
+ * @author Clara Joycelyne Siauttara
  */
 public class Point {
 	public int r;
