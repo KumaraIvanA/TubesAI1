@@ -130,10 +130,6 @@ public class IntegerChromosome extends Chromosome<IntegerChromosome> {
 			}
 		}
 
-		// Lakukan perbaikan array gen jika tidak valid
-		repair(childGenes1);
-		repair(childGenes2);
-
 		// Masukkan bitstring setiap anak ke dalam sebuah array
 		IntegerChromosome[] childrens = new IntegerChromosome[2];
 		childrens[0] = new IntegerChromosome(childGenes1, env);
