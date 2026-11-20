@@ -72,7 +72,7 @@ public class Main {
 		int npm_ketua = 24045;
 		Random randomTmp = new Random(npm_ketua);
 
-		// Batas angka yang akan menjadi seed. Seed tidak dapat melebihi 2¹⁶
+		// Batas angka yang akan menjadi seed. Seed tidak dapat melebihi 2^16
 		int bound = 1 << 16;
 
 		// Buat sejumlah seed tergatung dengan jumlah percobaan
@@ -127,14 +127,10 @@ public class Main {
 			System.out.println();
 		}
 
-		// Jika dilakukan lebih dari satu percobaan, tampilkan rangkuman dari
+		// Jika dilakukan lebih dari satu percobaan, tampilkan rata-rata dari
 		// cost setiap percobaan
 		if (runs > 1) {
 			System.out.printf("Average cost out of %d runs: %.5f\n", runs, costSum / runs);
-			System.out.println("Costs recap:");
-			for (double cost : costList) {
-				System.out.printf("%.5f\n", cost);
-			}
 		}
 	}
 
