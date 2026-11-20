@@ -284,7 +284,7 @@ public class IntegerChromosome extends Chromosome<IntegerChromosome> {
 			List<Integer> options = new ArrayList<Integer>(optionsSet);
 
 			// Acak List index sel kosong yang belum terpilih
-			Collections.shuffle(options, env.random());
+			Collections.shuffle(options);
 
 			// Untuk setiap gen
 			int optionsCounter = 0;
